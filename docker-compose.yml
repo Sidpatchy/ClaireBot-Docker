@@ -1,0 +1,58 @@
+version: '3'
+services:
+  clairebot:
+    build:
+      context: .
+      args:
+        - BOT_VERSION=${BOT_VERSION}
+        - API_VERSION=${API_VERSION}
+    container_name: ClaireBot
+    command: sh -c "sleep 10 && java -jar /app/bot.jar" # Sleep 10 seconds to ensure ClaireData is fully loaded.
+    volumes:
+      - ./config:/app/config
+    restart: unless-stopped
+
+  clairedata:
+    build:
+      context: .
+      args:
+        - BOT_VERSION=${BOT_VERSION}
+        - API_VERSION=${API_VERSION}
+    container_name: ClaireData
+    command: java -jar /app/api.jar
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SERVER_PORT=8080
+    ports:
+      - "8281:8080"
+    volumes:
+      - ./config:/app/config
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD", "nc", "-z", "localhost", "8080"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 40s
+
+  postgres:
+    image: postgres:15
+    user: root
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clairedata -d clairedata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

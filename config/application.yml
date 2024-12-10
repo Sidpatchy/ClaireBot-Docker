@@ -1,0 +1,23 @@
+app:
+  datasource:
+    jdbc-url: jdbc:postgresql://127.0.0.1:5432/clairedata
+    username: clairedata
+    password: examplePassowrd
+    pool-size: 30
+
+spring:
+  security:
+    user:
+      name: clairedata
+      password: examplePassword
+      roles: ADMIN
+    # Basic security settings
+    basic:
+      enabled: true
+      authorize-mode: AUTHENTICATED
+    # CORS and CSRF settings
+    csrf:
+      enabled: false
+    cors:
+      allowed-origins: "*"
+      allowed-methods: GET,POST,PUT,DELETE
