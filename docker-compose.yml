@@ -39,7 +39,7 @@ services:
     #   start_period: 40s
 
   postgres:
-    image: postgres:15
+    image: postgres:18
     user: root
     environment:
       POSTGRES_DB: ${POSTGRES_DB}

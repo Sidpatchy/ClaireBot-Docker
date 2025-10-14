@@ -1,5 +1,5 @@
 # Build stage for ClaireBot
-FROM eclipse-temurin:17-jdk-jammy AS bot-build
+FROM eclipse-temurin:25-jdk-noble AS bot-build
 ARG BOT_VERSION=main
 WORKDIR /build
 RUN apt-get update && apt-get install -y git
@@ -10,7 +10,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew shadowJar
 
 # Build stage for ClaireData (Spring Boot)
-FROM eclipse-temurin:17-jdk-jammy AS api-build
+FROM eclipse-temurin:25-jdk-noble AS api-build
 ARG API_VERSION=main
 WORKDIR /build
 RUN apt-get update && apt-get install -y git
@@ -21,7 +21,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
 # Final runtime stage
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:25-jdk-noble
 
 WORKDIR /app
 
