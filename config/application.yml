@@ -1,8 +1,8 @@
 app:
   datasource:
-    jdbc-url: jdbc:postgresql://127.0.0.1:5432/clairedata
+    jdbc-url: jdbc:postgresql://postgres:5432/clairedata
     username: clairedata
-    password: examplePassowrd
+    password: examplePassword
     pool-size: 30
 
 spring:
@@ -21,3 +21,15 @@ spring:
     cors:
       allowed-origins: "*"
       allowed-methods: GET,POST,PUT,DELETE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true

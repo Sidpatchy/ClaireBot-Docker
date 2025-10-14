@@ -25,6 +25,9 @@ FROM eclipse-temurin:25-jdk-noble
 
 WORKDIR /app
 
+# Install curl for healthchecks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Copy specific jar files
 COPY --from=bot-build /build/ClaireBot/build/libs/ClaireBot-*-all.jar /app/bot.jar
 COPY --from=api-build /build/ClaireData/build/libs/ClaireData-*.jar /app/api.jar
